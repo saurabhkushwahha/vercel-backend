@@ -12,8 +12,6 @@ const timeTableRoutes = require("./routes/timeTableRoutes");
 const StudyMaterial = require("./models/study");
 
 const app = express();
-
-// Connect to MongoDB
 connectDB();
 
 // Middleware
@@ -32,15 +30,14 @@ app.use("/api/notifications", timeTableRoutes);
 
 // Test route
 app.get("/", (req, res) => {
-  res.send("✅ API is running...");
+  res.send("API is running...");
 });
 
-// ✅ Background Cleanup Job (every 1 min check expired files)
 setInterval(async () => {
   try {
     const now = new Date();
     const expiredMaterials = await StudyMaterial.find({
-      expiresAt: { $ne: null, $lt: now }, // sirf unko delete karo jinke expiry hai
+      expiresAt: { $ne: null, $lt: now }, 
     });
 
     for (let material of expiredMaterials) {
@@ -55,8 +52,7 @@ setInterval(async () => {
   } catch (error) {
     console.error("Cleanup job error:", error);
   }
-}, 60 * 1000); // runs every 60 seconds
+}, 60 * 1000); 
 
-// Start server
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

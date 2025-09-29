@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const cloudinary= require("../config/cloudinary")
 
-// ✅ Upload Material with custom expiry OR permanent
+// Upload Material with custom expiry OR permanent
 exports.uploadMaterial = async (req, res) => {
   try {
     const { className, subject, materialName, expiresAt } = req.body;
@@ -45,7 +45,7 @@ exports.uploadMaterial = async (req, res) => {
   }
 };
 
-// ✅ Get All Materials
+// Get All Materials
 exports.getMaterials = async (req, res) => {
   try {
     const materials = await StudyMaterial.find().sort({ uploadedAt: -1 });

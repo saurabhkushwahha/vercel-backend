@@ -1,7 +1,6 @@
 const Result = require("../models/Result");
 const jwt = require("jsonwebtoken");
 
-// ✅ Admin adds results
 exports.addResults = async (req, res) => {
   try {
     const results = req.body.results;
@@ -42,7 +41,6 @@ exports.addResults = async (req, res) => {
   }
 };
 
-// ✅ Admin login
 exports.adminLogin = async (req, res) => {
   const { username, password } = req.body;
   if (username === "admin123" && password === "admin@123") {
@@ -53,7 +51,6 @@ exports.adminLogin = async (req, res) => {
   }
 };
  
-// ✅ Get result by email
 exports.getResultByEmail = async (req, res) => {
   try {
     const { email } = req.params;

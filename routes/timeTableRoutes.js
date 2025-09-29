@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-// ✅ Routes
+// Routes
 router.post("/", createNotification);               // Create notification
 router.get("/", getAllNotifications);               // Get all notifications
 router.get("/class/:className", getNotificationsByClass); // Get notifications by class
