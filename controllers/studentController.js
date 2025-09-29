@@ -1,10 +1,10 @@
-const Result = require("../models/Result");
-const Student = require("../models/Student");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+import Result from "../models/Result.js";
+import Student from "../models/student.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 // Student signup
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     let student = await Student.findOne({ email });
@@ -33,7 +33,7 @@ exports.signup = async (req, res) => {
 };
 
 // Student login
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const student = await Student.findOne({ email });
@@ -61,7 +61,7 @@ exports.login = async (req, res) => {
 };
 
 // Get own result
-exports.getMyResult = async (req, res) => {
+export const getMyResult = async (req, res) => {
   try {
     const email = req.student.email;
     const result = await Result.findOne({ studentEmail: email });

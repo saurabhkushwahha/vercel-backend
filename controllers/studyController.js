@@ -1,10 +1,10 @@
-const StudyMaterial = require("../models/study");
-const path = require("path");
-const fs = require("fs");
-const cloudinary= require("../config/cloudinary")
+import StudyMaterial from "../models/study.js";
+import path from "path";
+import fs from "fs";
+import cloudinary from "../config/cloudinary.js";
 
 // Upload Material with custom expiry OR permanent
-exports.uploadMaterial = async (req, res) => {
+export const uploadMaterial = async (req, res) => {
   try {
     const { className, subject, materialName, expiresAt } = req.body;
 
@@ -46,7 +46,7 @@ exports.uploadMaterial = async (req, res) => {
 };
 
 // Get All Materials
-exports.getMaterials = async (req, res) => {
+export const getMaterials = async (req, res) => {
   try {
     const materials = await StudyMaterial.find().sort({ uploadedAt: -1 });
     res.json(materials);
@@ -57,7 +57,7 @@ exports.getMaterials = async (req, res) => {
 };
 
 // Delete Material (Manual Delete)
-exports.deleteMaterial = async (req, res) => {
+export const deleteMaterial = async (req, res) => {
   try {
     const { id } = req.params;
     const material = await StudyMaterial.findByIdAndDelete(id);

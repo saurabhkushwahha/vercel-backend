@@ -1,15 +1,16 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
-const connectDB = require("./config/db");
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import cors from "cors";
+import path from "path";
+import fs from "fs";
+import connectDB from "./config/db.js";
 
 // Import routes
-const studyMaterialRoutes = require("./routes/studyRoute");
-const serviceRoutes = require("./routes/servicesRoutes");
-const timeTableRoutes = require("./routes/timeTableRoutes");
-const StudyMaterial = require("./models/study");
+import studyMaterialRoutes from "./routes/studyRoute.js";
+import serviceRoutes from "./routes/servicesRoutes.js";
+import timeTableRoutes from "./routes/timeTableRoutes.js";
+import StudyMaterial from "./models/study.js";
 
 const app = express();
 connectDB();
@@ -20,11 +21,17 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Static folder for uploaded files
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
-app.use("/api/admin", require("./routes/admin"));     // Admin routes
-app.use("/api/student", require("./routes/student")); // Student routes
+import adminRoutes from "./routes/admin.js";
+import studentRoutes from "./routes/student.js";
+app.use("/api/admin", adminRoutes);     // Admin routes
+app.use("/api/student", studentRoutes); // Student routes
 app.use("/api/materials", studyMaterialRoutes);       // Study material routes
 app.use("/api/services", serviceRoutes);              // Services routes
 app.use("/api/notifications", timeTableRoutes);
@@ -63,4 +70,4 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Export for Vercel serverless
-module.exports = app;
+export default app;

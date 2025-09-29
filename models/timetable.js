@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema(
   {
@@ -29,7 +29,7 @@ const notificationSchema = new mongoose.Schema(
       default: "",
     },
 
-    // 🔹 Auto-delete field
+    // Auto-delete field
     expireAt: {
       type: Date,
       required: true,
@@ -39,4 +39,5 @@ const notificationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Notification", notificationSchema);
+const Notification = mongoose.model("Notification", notificationSchema);
+export default Notification;

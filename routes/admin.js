@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
+import { getResultByEmail, addResults, adminLogin } from "../controllers/adminController.js";
 const router = express.Router();
-const { getResultByEmail, addResults, adminLogin } = require("../controllers/adminController");
 
 //  Admin login
 router.post("/login", adminLogin);
@@ -11,4 +11,4 @@ router.post("/results/add", addResults);
 //  Get result by email (frontend ke liye)
 router.get("/results/:email", getResultByEmail);
 
-module.exports = router;
+export default router;

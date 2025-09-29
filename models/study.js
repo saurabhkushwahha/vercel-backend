@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const studyMaterialSchema = new mongoose.Schema({
   className: { type: String, required: true },
@@ -9,4 +9,5 @@ const studyMaterialSchema = new mongoose.Schema({
   expiresAt: { type: Date, default: null }, // null = permanent
 });
 
-module.exports = mongoose.model("StudyMaterial", studyMaterialSchema);
+const StudyMaterial = mongoose.model("StudyMaterial", studyMaterialSchema);
+export default StudyMaterial;

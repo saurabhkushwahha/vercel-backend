@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const serviceSchema = new mongoose.Schema({
   selectedClass: {
@@ -26,4 +26,5 @@ const serviceSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Service', serviceSchema);
+const Service = mongoose.model('Service', serviceSchema);
+export default Service;

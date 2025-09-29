@@ -1,10 +1,10 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createNotification,
   getAllNotifications,
   getNotificationsByClass,
   deleteNotification,
-} = require("../controllers/timeTableController");
+} from "../controllers/timeTableController.js";
 
 const router = express.Router();
 
@@ -14,4 +14,4 @@ router.get("/", getAllNotifications);               // Get all notifications
 router.get("/class/:className", getNotificationsByClass); // Get notifications by class
 router.delete("/:id", deleteNotification);          // Delete by ID
 
-module.exports = router;
+export default router;

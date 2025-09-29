@@ -1,7 +1,7 @@
-const Service = require('../models/services');
+import Service from '../models/services.js';
 
 // POST - create new service submission
-exports.createService = async (req, res) => {
+export const createService = async (req, res) => {
   try {
     const newService = await Service.create(req.body);
     res.status(201).json({
@@ -16,7 +16,7 @@ exports.createService = async (req, res) => {
 };
 
 // GET - fetch all submissions (optional for admin)
-exports.getAllServices = async (req, res) => {
+export const getAllServices = async (req, res) => {
   try {
     const services = await Service.find().sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: services });

@@ -1,7 +1,7 @@
-const Result = require("../models/Result");
-const jwt = require("jsonwebtoken");
+import Result from "../models/Result.js";
+import jwt from "jsonwebtoken";
 
-exports.addResults = async (req, res) => {
+export const addResults = async (req, res) => {
   try {
     const results = req.body.results;
     if (!results || results.length === 0)
@@ -41,7 +41,7 @@ exports.addResults = async (req, res) => {
   }
 };
 
-exports.adminLogin = async (req, res) => {
+export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
   if (username === "admin123" && password === "admin@123") {
     const token = jwt.sign({ username }, "adminSecret123", { expiresIn: "1h" });
@@ -51,7 +51,7 @@ exports.adminLogin = async (req, res) => {
   }
 };
  
-exports.getResultByEmail = async (req, res) => {
+export const getResultByEmail = async (req, res) => {
   try {
     const { email } = req.params;
     const result = await Result.findOne({ studentEmail: email });

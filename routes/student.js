@@ -1,7 +1,7 @@
-const express = require("express");
+import express from "express";
+import { signup, login, getMyResult } from "../controllers/studentController.js";
+import { studentAuth } from "../middlewares/auth.js";
 const router = express.Router();
-const { signup, login, getMyResult } = require("../controllers/studentController");
-const {studentAuth} = require("../middlewares/auth")
 
 // Student signup/login
 router.post("/signup", signup);
@@ -10,4 +10,4 @@ router.post("/login", login);
 // Get own result
 router.get("/my-result", studentAuth, getMyResult);
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
 // backend/middleware/auth.js
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 // Admin auth
 const adminAuth = (req, res, next) => {
@@ -29,4 +29,4 @@ const studentAuth = (req, res, next) => {
   }
 };
 
-module.exports = { adminAuth, studentAuth };
+export { adminAuth, studentAuth };

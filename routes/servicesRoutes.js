@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import { createService, getAllServices } from '../controllers/serviceController.js';
 const router = express.Router();
-const { createService, getAllServices } = require('../controllers/serviceController');
 
 // Route to submit the form
 router.post('/submit', createService);
@@ -8,4 +8,4 @@ router.post('/submit', createService);
 // Optional: get all submissions for admin
 router.get('/', getAllServices);
 
-module.exports = router;
+export default router;

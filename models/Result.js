@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const ResultSchema = new mongoose.Schema({
   studentEmail: { type: String, required: true },
@@ -9,4 +9,5 @@ const ResultSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Result", ResultSchema);
+const Result = mongoose.model("Result", ResultSchema);
+export default Result;

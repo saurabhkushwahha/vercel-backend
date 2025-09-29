@@ -1,7 +1,7 @@
-const Notification = require("../models/timetable");
+import Notification from "../models/timetable.js";
 
 // Create Notification
-const createNotification = async (req, res) => {
+export const createNotification = async (req, res) => {
   try {
     const { className, subject, testDate, testTime, description } = req.body;
 
@@ -30,7 +30,7 @@ const createNotification = async (req, res) => {
 };
 
 // Get All Notifications
-const getAllNotifications = async (req, res) => {
+export const getAllNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find().sort({ testDate: 1 });
     res.status(200).json(notifications);
@@ -40,7 +40,7 @@ const getAllNotifications = async (req, res) => {
 };
 
 // Get Notifications by Class
-const getNotificationsByClass = async (req, res) => {
+export const getNotificationsByClass = async (req, res) => {
   try {
     const { className } = req.params;
     const notifications = await Notification.find({ className }).sort({ testDate: 1 });
@@ -56,7 +56,7 @@ const getNotificationsByClass = async (req, res) => {
 };
 
 // Delete Notification by ID (optional manual delete)
-const deleteNotification = async (req, res) => {
+export const deleteNotification = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedNotification = await Notification.findByIdAndDelete(id);
@@ -71,9 +71,4 @@ const deleteNotification = async (req, res) => {
   }
 };
 
-module.exports = {
-  createNotification,
-  getAllNotifications,
-  getNotificationsByClass,
-  deleteNotification,
-};
+

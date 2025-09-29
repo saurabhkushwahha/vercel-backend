@@ -1,7 +1,7 @@
-const cloudinary = require ("../config/cloudinary")
-const multer = require("multer")
-const fs = require("fs");
-const path=require("path")
+import cloudinary from "../config/cloudinary.js";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -18,8 +18,6 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max
 });
-
-
 
 // Middleware to upload file to Cloudinary
 const uploadToCloudinary = async (req, res, next) => {
@@ -40,4 +38,4 @@ const uploadToCloudinary = async (req, res, next) => {
   }
 };
 
-module.exports= { upload,uploadToCloudinary}
+export { upload, uploadToCloudinary };
