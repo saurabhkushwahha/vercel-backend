@@ -55,4 +55,11 @@ setInterval(async () => {
 }, 60 * 1000); 
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Only listen locally (for dev), but export for Vercel
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+// Export for Vercel serverless
+module.exports = app;
