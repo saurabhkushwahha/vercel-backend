@@ -37,8 +37,8 @@ app.use("/api/services", serviceRoutes);              // Services routes
 app.use("/api/notifications", timeTableRoutes);
 
 // Test route
-app.get("/", (req, res) => {
-  res.send("API is running...");
+app.get("/", (_, res) => {
+  res.send("API is running......");
 });
 
 setInterval(async () => {
@@ -65,9 +65,9 @@ setInterval(async () => {
 const PORT = process.env.PORT || 8080;
 
 // Only listen locally (for dev), but export for Vercel
-if (process.env.NODE_ENV !== "production") {
+
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+
 
 // Export for Vercel serverless
 export default app;
