@@ -35,7 +35,7 @@ const uploadToCloudinary = async (req, res, next) => {
     req.file.cloudinaryUrl = result.secure_url;
 
     // Clean up local file after successful upload
-    fs.unlinkSync(req.file.path);
+    // fs.unlinkSync(req.file.path);
 
     next();
   } catch (error) {

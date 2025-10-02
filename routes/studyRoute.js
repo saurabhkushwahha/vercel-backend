@@ -10,3 +10,4 @@ router.get("/", getMaterials);
 router.delete("/:id", deleteMaterial);
 
 export default router;
+
