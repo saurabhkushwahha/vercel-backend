@@ -2,8 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import cors from "cors";
-import path from "path";
-import fs from "fs";
 import connectDB from "./config/db.js";
 
 // Import routes
@@ -13,19 +11,18 @@ import timeTableRoutes from "./routes/timeTableRoutes.js";
 import StudyMaterial from "./models/study.js";
 
 const app = express();
-connectDB();
+
+// Connect to MongoDB
+connectDB().then(() => {
+  console.log("MongoDB connected successfully");
+}).catch((err) => {
+  console.error("MongoDB connection error:", err);
+  process.exit(1); // Exit app if DB connection fails
+});
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
-
-// Static folder for uploaded files
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 import adminRoutes from "./routes/admin.js";
@@ -41,33 +38,10 @@ app.get("/", (_, res) => {
   res.send("API is running......");
 });
 
-// setInterval(async () => {
-//   try {
-//     const now = new Date();
-//     const expiredMaterials = await StudyMaterial.find({
-//       expiresAt: { $ne: null, $lt: now }, 
-//     });
-
-//     for (let material of expiredMaterials) {
-//       const filePath = path.join(__dirname, "uploads", material.pdfFile);
-
-//       fs.unlink(filePath, (err) => {
-//         if (err) console.error("Auto delete file error:", err);
-//       });
-
-      
-//     }
-//   } catch (error) {
-//     console.error("Cleanup job error:", error);
-//   }
-// }, 60 * 1000); 
-
-const PORT = process.env.PORT || 8080;
-
 // Only listen locally (for dev), but export for Vercel
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-// Export for Vercel serverless
 export default app;

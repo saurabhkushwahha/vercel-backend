@@ -1,45 +1,49 @@
-import cloudinary from "../config/cloudinary.js";
 import multer from "multer";
-import fs from "fs";
-import path from "path";
+import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier"; // Install: npm i streamifier
 
-// Create uploads dir if not exists
-const uploadsDir = path.join(process.cwd(), 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+//  Use memoryStorage to avoid writing files to disk
+const storage = multer.memoryStorage();
 
 const upload = multer({
-  storage: storage,
+  storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max
 });
 
-// Middleware to upload file to Cloudinary
+// Middleware to upload file buffer directly to Cloudinary
 const uploadToCloudinary = async (req, res, next) => {
-  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   try {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: "raw",
-      folder: "study-materials",
-    });
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
 
+    // Upload the buffer as a stream
+    const streamUpload = () =>
+      new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: "raw", // PDFs are non-image files
+            folder: "study-materials",
+          },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+
+        // Stream the buffer to Cloudinary
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+
+    const result = await streamUpload();
+
+    // Save the Cloudinary URL for controller use
     req.file.cloudinaryUrl = result.secure_url;
-
-    // Clean up local file after successful upload
-    // fs.unlinkSync(req.file.path);
 
     next();
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error("Cloudinary Upload Error:", error);
+    return res.status(500).json({ error: "Cloud upload failed" });
   }
 };
 
