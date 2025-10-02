@@ -41,26 +41,26 @@ app.get("/", (_, res) => {
   res.send("API is running......");
 });
 
-setInterval(async () => {
-  try {
-    const now = new Date();
-    const expiredMaterials = await StudyMaterial.find({
-      expiresAt: { $ne: null, $lt: now }, 
-    });
+// setInterval(async () => {
+//   try {
+//     const now = new Date();
+//     const expiredMaterials = await StudyMaterial.find({
+//       expiresAt: { $ne: null, $lt: now }, 
+//     });
 
-    for (let material of expiredMaterials) {
-      const filePath = path.join(__dirname, "uploads", material.pdfFile);
+//     for (let material of expiredMaterials) {
+//       const filePath = path.join(__dirname, "uploads", material.pdfFile);
 
-      fs.unlink(filePath, (err) => {
-        if (err) console.error("Auto delete file error:", err);
-      });
+//       fs.unlink(filePath, (err) => {
+//         if (err) console.error("Auto delete file error:", err);
+//       });
 
       
-    }
-  } catch (error) {
-    console.error("Cleanup job error:", error);
-  }
-}, 60 * 1000); 
+//     }
+//   } catch (error) {
+//     console.error("Cleanup job error:", error);
+//   }
+// }, 60 * 1000); 
 
 const PORT = process.env.PORT || 8080;
 
