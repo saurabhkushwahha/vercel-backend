@@ -22,7 +22,7 @@ const uploadToCloudinary = async (req, res, next) => {
       new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           {
-            resource_type: "raw", // PDFs are non-image files
+            resource_type: "auto", // PDFs are non-image files
             folder: "study-materials",
           },
           (error, result) => {
