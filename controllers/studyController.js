@@ -56,24 +56,32 @@ export const getMaterials = async (req, res) => {
   }
 };
 
-// Delete Material (Manual Delete)
 export const deleteMaterial = async (req, res) => {
   try {
     const { id } = req.params;
-    const material = await StudyMaterial.findByIdAndDelete(id);
-     console.log("id saurabh",id)
-     console.log(material)
 
+    // Check if ID is valid
+    if (!id) {
+      return res.status(400).json({ message: "Invalid material ID" });
+    }
+
+    // Attempt to delete the material
+    const material = await StudyMaterial.findByIdAndDelete(id);
+
+    // Check if material was found and deleted
     if (!material) {
       return res.status(404).json({ message: "Material not found" });
     }
 
-    
+    console.log("id deleted:", id);
+    console.log("Deleted material:", material);
+
+    // If there is a PDF file associated, delete from Cloudinary
     if (material.pdfFile) {
       const urlParts = material.pdfFile.split("/");
-      const fileWithExt = urlParts[urlParts.length - 1]; 
+      const fileWithExt = urlParts[urlParts.length - 1];
       const publicId = urlParts
-        .slice(urlParts.indexOf("study-materials")) 
+        .slice(urlParts.indexOf("study-materials"))
         .join("/")
         .replace(".pdf", ""); // remove extension
 
@@ -82,14 +90,16 @@ export const deleteMaterial = async (req, res) => {
       console.log(`🗑 Deleted from Cloudinary: ${publicId}`);
     }
 
-
+    // Also, delete the file locally if it exists
     const filePath = path.join(__dirname, "../uploads", material.pdfFile);
-
     fs.unlink(filePath, (err) => {
       if (err) console.error("File delete error:", err);
+      else console.log("Local file deleted:", filePath);
     });
 
+    // Respond with success message
     res.json({ message: "Material deleted successfully" });
+
   } catch (error) {
     console.error("Delete Error:", error);
     res.status(500).json({ message: "Server error" });
