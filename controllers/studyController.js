@@ -67,7 +67,7 @@ export const deleteMaterial = async (req, res) => {
 
     // Attempt to delete the material
     const material = await StudyMaterial.findByIdAndDelete(id);
-
+    console.log(material,"do checking that it will return or not")
     // Check if material was found and deleted
     if (!material) {
       return res.status(404).json({ message: "Material not found" });
@@ -90,12 +90,7 @@ export const deleteMaterial = async (req, res) => {
       console.log(`🗑 Deleted from Cloudinary: ${publicId}`);
     }
 
-    // Also, delete the file locally if it exists
-    const filePath = path.join(__dirname, "../uploads", material.pdfFile);
-    fs.unlink(filePath, (err) => {
-      if (err) console.error("File delete error:", err);
-      else console.log("Local file deleted:", filePath);
-    });
+   
 
     // Respond with success message
     res.json({ message: "Material deleted successfully" });
