@@ -1,0 +1,50 @@
+# Node modules
+node_modules/
+**/node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+. next/
+out/
+.vite/
+*.tsbuildinfo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Uploaded / service account files (sensitive)
+service-account.json
+*.pem
+*.key
+
+# Misc
+coverage/
+*.tgz
+.cache/
+.pnp.*
+.eslintcache
+
+# ignore the service acount.jso file 
+service-account-key.json
