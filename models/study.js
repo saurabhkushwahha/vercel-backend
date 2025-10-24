@@ -5,7 +5,7 @@ const studySchema = new mongoose.Schema({
   subject: { type: String, required: true },
   materialName: { type: String, required: true },
   pdfFile: { type: String, required: true },
-  cloudinaryPublicId: { type: String, required: true },
+  cloudinaryPublicId: { type: String },
   uploadedAt: { type: Date, default: Date.now },
   expiresAt: { type: Date, default: null },
 });

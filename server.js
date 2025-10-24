@@ -45,8 +45,8 @@ app.use("/api/notifications", notificationRoutes); // ✅ notifications route
 // -----------------
 // Cleanup expired study materials
 // -----------------
-setInterval(cleanupExpiredMaterials, 60 * 60 * 1000);
-setTimeout(cleanupExpiredMaterials, 5000);
+// setInterval(cleanupExpiredMaterials, 60 * 60 * 1000);
+// setTimeout(cleanupExpiredMaterials, 5000);
 
 // -----------------
 // Root

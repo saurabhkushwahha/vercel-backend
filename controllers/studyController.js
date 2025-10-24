@@ -1,4 +1,3 @@
-const { Readable } = require("stream");
 const StudyMaterial = require("../models/study");
 const cloudinary = require("../utils/cloudinary");
 
@@ -17,31 +16,16 @@ exports.uploadMaterial = async (req, res) => {
         return res.status(400).json({ message: "Invalid expiry date!" });
     }
 
-    // Upload PDF to Cloudinary as RAW
-    const uploadResult = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: "study_materials",
-          resource_type: "raw", // Important for PDFs
-          public_id: `${Date.now()}_${materialName.replace(/\s+/g, "_")}`,
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-
-      Readable.from(req.file.buffer).pipe(stream);
-    });
 
     const newMaterial = await StudyMaterial.create({
       className,
       subject,
       materialName,
-      pdfFile: uploadResult.secure_url, // direct Cloudinary URL
-      cloudinaryPublicId: uploadResult.public_id,
+      pdfFile: req.file.cloudinaryUrl,
       expiresAt: expiryDate,
     });
+
+    await newMaterial.save()
 
     res.status(201).json({
       message: expiryDate
@@ -74,16 +58,43 @@ exports.getMaterials = async (req, res) => {
 exports.deleteMaterial = async (req, res) => {
   try {
     const { id } = req.params;
-    const material = await StudyMaterial.findById(id);
-    if (!material) return res.status(404).json({ message: "Material not found" });
 
-    await cloudinary.uploader.destroy(material.cloudinaryPublicId, { resource_type: "raw" });
-    await StudyMaterial.findByIdAndDelete(id);
+    // Check if ID is valid
+    if (!id) {
+      return res.status(400).json({ message: "Invalid material ID" });
+    }
 
+    // Attempt to delete the material
+    const material = await StudyMaterial.findByIdAndDelete(id);
+    // Check if material was found and deleted
+    if (!material) {
+      return res.status(404).json({ message: "Material not found" });
+    }
+
+
+
+    // If there is a PDF file associated, delete from Cloudinary
+    if (material.pdfFile) {
+      const urlParts = material.pdfFile.split("/");
+      const fileWithExt = urlParts[urlParts.length - 1];
+      const publicId = urlParts
+        .slice(urlParts.indexOf("study-materials"))
+        .join("/")
+        .replace(".pdf", ""); // remove extension
+
+      //  Delete from Cloudinary
+      await cloudinary.uploader.destroy(publicId, { resource_type: "raw" });
+      console.log(`🗑 Deleted from Cloudinary: ${publicId}`);
+    }
+
+
+
+    // Respond with success message
     res.json({ message: "Material deleted successfully" });
+
   } catch (error) {
-    console.error("Delete Material Error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("Delete Error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
