@@ -38,32 +38,44 @@ exports.getAllResults = async (req, res) => {
 exports.getResultsByEmail = async (req, res) => {
   try {
     const email = req.params.email.trim().toLowerCase();
-
-    // Fetch results for this student
-    const results = await Result.find({ studentEmail: email }).sort({ createdAt: -1 });
-
-    if (!results || results.length === 0) {
-      return res.status(404).json({ success: false, message: "No results found" });
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
     }
 
-    // Take the latest result
-    const latestResult = results[0];
+    // Fetch results for this student
+    const latestResult = await Result.findOne({ studentEmail: email }).sort({ createdAt: -1 }).lean();
+
+    if (!latestResult) {
+      return res.status(200).json({
+        success: true,
+        result: null,
+        message: "No results found yet",
+      });
+
+    }
+
+
 
     // Calculate score & totalMarks if not provided
     const score =
-      latestResult.obtainedMarks ||
-      latestResult.subjects.reduce((acc, sub) => acc + sub.total, 0);
+      latestResult.obtainedMarks ??
+      latestResult.subjects?.reduce((acc, sub) => acc + (sub.total || 0), 0) ??
+      0;
 
     const totalMarks =
-      latestResult.totalMarks ||
-      latestResult.subjects.reduce((acc, sub) => acc + sub.total, 0);
+      latestResult.totalMarks ??
+      latestResult.subjects?.reduce((acc, sub) => acc + (sub.total || 0), 0) ??
+      0;
 
-    const percentage = ((score / totalMarks) * 100).toFixed(2);
+    const percentage = totalMarks > 0 ? ((score / totalMarks) * 100).toFixed(2) : 0;
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       result: {
-        ...latestResult._doc,
+        ...latestResult,
         score,
         totalMarks,
         percentage,
