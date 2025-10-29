@@ -10,7 +10,6 @@ const { cleanupExpiredMaterials } = require("./controllers/studyController");
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
-const studentRoutes = require("./routes/studentRoutes");
 const adminRoutes = require("./routes/admin");
 const resultRoutes = require("./routes/resultRoutes");
 const studyRoutes = require("./routes/studyRoute");
@@ -25,6 +24,7 @@ const PORT = process.env.PORT || 8080;
 // Middleware
 // -----------------
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+console.log("corss checking servierjs file:::::::::::", process.env.FRONTEND_URL)
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
@@ -37,7 +37,6 @@ connectDB(); // uses config/db.js
 // API Routes
 // -----------------
 app.use("/api/auth", authRoutes);
-app.use("/api/students", studentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/results", resultRoutes);
 app.use("/api/study", studyRoutes);
