@@ -3,11 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const connectDB = require("./config/db");
+const cookieParser = require("cookie-parser");
 
 // Controllers
 const { cleanupExpiredMaterials } = require("./controllers/studyController");
 
 // Routes
+const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const adminRoutes = require("./routes/admin");
 const resultRoutes = require("./routes/resultRoutes");
@@ -22,10 +24,10 @@ const PORT = process.env.PORT || 8080;
 // -----------------
 // Middleware
 // -----------------
-app.use(cors({ origin: "*", credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-
+app.use(cookieParser());
 // -----------------
 // Connect MongoDB
 // -----------------
@@ -34,6 +36,7 @@ connectDB(); // uses config/db.js
 // -----------------
 // API Routes
 // -----------------
+app.use("/api/auth", authRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/results", resultRoutes);
