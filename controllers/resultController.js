@@ -106,6 +106,7 @@ exports.updateResult = async (req, res) => {
 
 // Delete a result by ID
 exports.deleteResult = async (req, res) => {
+
   try {
     const result = await Result.findByIdAndDelete(req.params.id);
     if (!result) return res.status(404).json({ msg: "Result not found" });

@@ -42,7 +42,7 @@ exports.signup = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message + " dekho bahu ho gaya hai" })
+        res.status(400).json({ success: false, message: error.message })
     }
 
 }
@@ -102,7 +102,7 @@ exports.checkAuth = async (req, res) => {
         }
         res.status(200).json({ success: true, user })
     } catch (error) {
-        console.error("Signup error:", err.message);
+        console.error("Signup error:", error.message);
         res.status(500).json({ success: false, message: "Server error" });
     }
 
