@@ -4,7 +4,9 @@ const SubjectSchema = new mongoose.Schema({
   name: { type: String, required: true },
   objective: { type: Number, required: true },
   subjective: { type: Number, required: true },
-  total: { type: Number, required: true },
+  obtainedSubjectMarks: { type: Number, required: true },
+  totalSubjectMarks: { type: Number, required: true },
+  isPassed: { type: Boolean }
 });
 
 const ResultSchema = new mongoose.Schema(
